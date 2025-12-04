@@ -1,0 +1,121 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+
+# Backend specific
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/venv/
+backend/.venv/
+backend/env/
+backend/*.log
+backend/.env
+backend/.env.local
+backend/linkedin_jobs_*.csv
+backend/test_api.py.log
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+.venv
+
+# Logs
+*.log
+logs/
+
+# Junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Frontend specific (Node.js/Next.js)
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.*
+frontend/.yarn/*
+frontend//.next/
+frontend//out/
+frontend//build
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
+
+# DevOps specific
+devops/__pycache__/
+devops/*.pyc
+devops/*.log
+devops/venv/
+devops/.venv/
+
+# Node.js (for frontend)
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Testing
+/coverage
+backend/coverage/
+frontend/coverage/
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+dist/
+
+# Misc
+*.pem
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment files
+.env*
+!.env.example
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-workspace
+
