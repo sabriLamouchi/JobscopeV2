@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LinkedIn Job Scraper - Frontend
 
-## Getting Started
+A modern Next.js 16 frontend for the LinkedIn Job Scraper API with shadcn/ui components.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Frontend**: Next.js 16 with Tailwind CSS
+- **BFF Layer**: Next.js API Routes (`/api/scrape`, `/api/health`)
+- **Backend**: Flask API (Scraping Microservice)
+- **Future**: Analytics MS, AI/Gemini MS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Install dependencies: `npm install`
+2. Configure `.env.local`: Copy from `.env.example`
+3. Start Flask backend: `python ../backend/linkedin.py`
+4. Start frontend: `npm run dev`
+5. Open http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+- `app/page.tsx` - Main search UI
+- `app/api/` - BFF endpoints
+- `components/` - React components (SearchForm, JobCard, JobsList)
+- `lib/types.ts` - TypeScript interfaces
+- `lib/services/` - API service layer
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ Modern responsive UI with dark mode
+ Advanced search filters
+ Real-time job scraping
+ BFF API layer
+ Backend health monitoring
+ TypeScript & Tailwind CSS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See README for full documentation.
