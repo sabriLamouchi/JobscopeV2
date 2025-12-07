@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { SearchForm } from "@/components/SearchForm";
 import { JobsList } from "@/components/JobsList";
 import { HistoryTab } from "@/components/HistoryTab";
-import { SearchParams, ScrapingResponse, Job } from "@/lib/types";
+import { ChatBot } from "@/components/ChatBot";
+import { SearchParams, ScrapingResponse, Job, SearchHistory } from "@/lib/types";
 import { historyService } from "@/lib/services/historyService";
 import { Briefcase, AlertCircle, Clock } from "lucide-react";
 
@@ -16,6 +17,13 @@ export default function Home() {
   const [backendHealth, setBackendHealth] = useState<boolean | null>(null);
   const [activeTab, setActiveTab] = useState<"search" | "history">("search");
   const [lastSearchParams, setLastSearchParams] = useState<SearchParams | null>(null);
+  const [history, setHistory] = useState<SearchHistory[]>([]);
+
+  // Load history on mount
+  useEffect(() => {
+    const loadedHistory = historyService.getHistory();
+    setHistory(loadedHistory);
+  }, []);
 
   // Check backend health on mount
   useEffect(() => {
@@ -55,7 +63,8 @@ export default function Home() {
         setTotalJobs(data.total_jobs || data.jobs.length);
 
         // Add to history
-        historyService.addSearch(params, data.jobs, data.total_jobs || data.jobs.length, data.timestamp);
+        const newHistory = historyService.addSearch(params, data.jobs, data.total_jobs || data.jobs.length, data.timestamp);
+        setHistory((prev) => [newHistory, ...prev]);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -167,6 +176,9 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {/* AI Chat Bot */}
+      <ChatBot currentJobs={jobs} searchHistory={history} />
     </div>
   );
 }

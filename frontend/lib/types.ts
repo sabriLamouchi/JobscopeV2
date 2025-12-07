@@ -38,6 +38,22 @@ export interface SearchHistory {
   dateAdded: Date;
 }
 
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+}
+
+export interface ChatResponse {
+  status: "success" | "error";
+  conversation_id: string;
+  message: string;
+  timestamp: string;
+  history_length?: number;
+  error?: string;
+  code?: string;
+}
+
 export const DATE_POSTED_OPTIONS = [
   { value: "any", label: "Any time" },
   { value: "24h", label: "Past 24 hours" },
