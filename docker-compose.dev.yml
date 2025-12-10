@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    hostname: backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    networks:
+      - linkedin-network-dev
+    expose:
+      - "5000"
+    command: python linkedin.py
+
+  ai-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.ai
+    container_name: ai-service
+    hostname: ai-service
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - linkedin-network-dev
+    expose:
+      - "5001"
+    command: python ai_service.py
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    hostname: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+      - NEXT_PUBLIC_AI_SERVICE_URL=http://ai-service:5001
+      - BACKEND_URL=http://backend:5000
+      - AI_SERVICE_URL=http://ai-service:5001
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+      - ai-service
+    restart: unless-stopped
+    networks:
+      - linkedin-network-dev
+    expose:
+      - "3000"
+    command: npm run dev
+
+networks:
+  linkedin-network-dev:
+    driver: bridge

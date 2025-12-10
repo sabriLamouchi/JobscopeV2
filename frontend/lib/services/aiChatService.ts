@@ -1,7 +1,5 @@
 import { ChatResponse, Job, SearchHistory } from "@/lib/types";
 
-const AI_SERVICE_URL = process.env.NEXT_PUBLIC_AI_SERVICE_URL || "http://localhost:5001";
-
 export const aiChatService = {
   // Send a message to the AI service
   async sendMessage(
@@ -11,7 +9,7 @@ export const aiChatService = {
     conversationId?: string
   ): Promise<ChatResponse> {
     try {
-      const response = await fetch(`${AI_SERVICE_URL}/chat`, {
+      const response = await fetch(`/api/ai/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +43,7 @@ export const aiChatService = {
   // Get conversation history
   async getConversation(conversationId: string) {
     try {
-      const response = await fetch(`${AI_SERVICE_URL}/conversation/${conversationId}`);
+      const response = await fetch(`/api/ai/conversation/${conversationId}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch conversation");
@@ -60,7 +58,7 @@ export const aiChatService = {
   // Delete a conversation
   async deleteConversation(conversationId: string) {
     try {
-      const response = await fetch(`${AI_SERVICE_URL}/conversation/${conversationId}`, {
+      const response = await fetch(`/api/ai/conversation/${conversationId}`, {
         method: "DELETE",
       });
 
@@ -77,7 +75,7 @@ export const aiChatService = {
   // Check if AI service is available
   async checkHealth() {
     try {
-      const response = await fetch(`${AI_SERVICE_URL}/health`);
+      const response = await fetch(`/api/ai/health`);
       return response.ok;
     } catch {
       return false;
