@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # Backend Scraping Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    hostname: backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    networks:
+      - linkedin-network
+    expose:
+      - "5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # AI Chatbot Service
+  ai-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.ai
+    container_name: ai-service
+    hostname: ai-service
+    ports:
+      - "5001:5001"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./backend:/app
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - linkedin-network
+    expose:
+      - "5001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    hostname: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+      - NEXT_PUBLIC_AI_SERVICE_URL=http://ai-service:5001
+      - BACKEND_URL=http://backend:5000
+      - AI_SERVICE_URL=http://ai-service:5001
+    depends_on:
+      - backend
+      - ai-service
+    restart: unless-stopped
+    networks:
+      - linkedin-network
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  linkedin-network:
+    driver: bridge
