@@ -43,6 +43,16 @@ def setup_driver():
     options = Options()
     options.add_argument("--start-maximized")
     options.add_argument("--incognito")
+    # Docker-specific arguments for headless execution
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--single-process")
+    options.add_argument("--disable-web-resources")
+    options.add_argument("--disable-extensions")
+    # Use system chromium
+    options.binary_location = "/usr/bin/chromium"
     return webdriver.Chrome(options=options)
 
 def build_linkedin_url(keyword, location, exp_levels, workplace_types, date_posted):
